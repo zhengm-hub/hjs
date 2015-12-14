@@ -1,0 +1,281 @@
+@ layout("../_layout/layout.html",{title:'开发者门户 | 发布应用'}){
+<script type="text/javascript" src="@{BASE_URL}/static/script/page.js"></script>
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="box box-primary">
+
+            <div class="box-header">
+                <h3 class="box-title">my apps</h3>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th><input type='checkbox' class='square'></th>
+                        <th>NO</th>
+                        <th orderBy="Name" sort="asc">Name</th>
+                        <th orderBy="Memory" sort="asc">Memory</th>
+                        <th orderBy="Instance" sort="asc">Instance</th>
+                        <th orderBy="Image" sort="asc">Image</th>
+                        <th>CreateAt</th>
+                        <th>Operation</th>
+                    </tr>
+                    </thead>
+                    <tbody id="dataList">
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="box-footer">
+                <button type="button" class="btn btn-primary" onclick="window.location.href='@{BASE_URL}/app/add';">Add
+                </button>
+            </div>
+        </div>
+        <!-- /.box -->
+    </div>
+    <!--/.col (left) -->
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        initRestClient();
+        initAppsList();
+    });
+
+    var initRestClient = function () {
+        //修改RestClient默认设置
+        $.rest.updateOptions({
+            baseUrl: '@{BASE_URL}/api/apps',
+            error: function (errMessage) {
+                alert(errMessage);
+            }
+        });
+    }
+
+    var initAppsList = function () {
+        var url = '@{BASE_URL}/api/apps';
+        $("#dataList").JsRenderData({
+            sourceUrl: url,
+            templateId: "dataListTpl",
+            isPage: true, //是否分页
+            pageSize: 10, //每页的个数
+            pageIndex: 1,
+            parameter: {isPage: true,}
+        });
+    }
+
+    /**
+     * 获取App列表
+     */
+    var getAppsList = function () {
+        $.rest.get({
+            url: '/',
+            urlParams: {isPage: true, pageSize: 2, pageIndex: 1},
+            success: function (data) {
+                debugger;
+                var html = $("#dataListTpl").render(data.dataList);
+                $("#dataList").html(html);
+            }
+        });
+    };
+
+    // 进入编辑模式
+    var edit = function (obj) {
+        var current_tr = $(obj).parent().parent().parent();
+        current_tr.find('text').hide();
+        current_tr.find('input[type="text"]').show();
+        current_tr.find("#viewOperation").hide();
+        current_tr.find("#editOperation").show();
+    };
+
+    // 取消编辑
+    var cancle = function (obj) {
+        var current_tr = $(obj).parent().parent().parent();
+        current_tr.find('text').show();
+        current_tr.find('input[type="text"]').hide();
+        current_tr.find("#viewOperation").show();
+        current_tr.find("#editOperation").hide();
+    };
+
+    // 保存更新
+    var update = function (obj, id) {
+        var current_tr = $(obj).parent().parent().parent();
+        var app = {
+            id: id,
+            memory: current_tr.find('input[type="text"][name="memory"]').val(),
+            instance: current_tr.find('input[type="text"][name="instance"]').val()
+        };
+        $.rest.put({
+            url: '/{id}',
+            urlParams: {id: id},
+            data: app,
+            success: function (data) {
+                initAppsList();
+            }
+        });
+    };
+
+    // 删除
+    var del = function (id) {
+        $.rest.del({
+            url: '/{id}',
+            urlParams: {id: id},
+            success: function (data) {
+                initAppsList();
+            }
+        });
+    }
+
+</script>
+
+@ }
+
+<script id="dataListTpl" type="text/x-jsrender">
+{{for #data}}
+    <tr>
+    	<td><input type='checkbox' class='minimal' id='app_{{:id}}' value='{{:id}}'></td>
+		<td>{{:#getIndex()+1}}</td>
+        <td><a href="http://{{:name}}.paas.com">{{:name}}</a></td>
+        <td>
+            <text>{{:memory}}</text>
+            <input type="text" name="memory" id="" style="display: none" value="{{:memory}}"/>
+        </td>
+        <td>
+            <text>{{:instance}}</text>
+            <input type="text" name="instance" id="" style="display: none" value="{{:instance}}"/>
+        </td>
+        <td>{{:image}}</td>
+        <td>--</td>
+        <td>
+            <div id="viewOperation">
+                <a class="option-a" onclick="edit(this)">编辑</a>
+			    <a class="option-a" onclick="del({{:id}})">删除</a>
+            </div>
+
+            <div id="editOperation" style="display: none">
+            	<a class="option-a" onclick="update(this,{{:id}})">保存</a>
+			    <a class="option-a" onclick="cancle(this)">取消</a>
+            </div>
+        </td>
+    </tr>
+{{/for}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>

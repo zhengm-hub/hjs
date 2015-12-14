@@ -1,0 +1,14 @@
+{
+  "name": "layer",
+  "homepage": "https://github.com/sentsin/layer",
+  "_release": "e90a35e955",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "e90a35e9556bc44b0330114faf857393251d78f5"
+  },
+  "_source": "https://github.com/sentsin/layer.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/sentsin/layer.git",
+  "_direct": true
+}

@@ -1,0 +1,43 @@
+@ layout("../_layout/layout.html",{title:'开发者门户 | 构建镜像'}){
+
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="box box-primary">
+
+            <div class="box-header">
+                <h3 class="box-title">building paas image</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <textarea name="log" id="log" style="width: 900px; height: 450px;"
+                          readonly="readonly">
+                    @{log}
+                </textarea>
+            </div>
+
+        </div>
+        <!-- /.box -->
+    </div>
+    <!--/.col (left) -->
+</div>
+
+@ }
+
+<script type="text/javascript">
+    var BASE_URL = "@{BASE_URL}";
+    $(function () {
+        var url = BASE_URL+'readLog';
+        var para = {logfile: "@{logFile}"};
+        var readlog = function () {
+            $.get(url, para, function (data) {
+                debugger;
+                $("#log").text(data.logContent);
+            });
+        };
+        setInterval(function () {
+            readlog();
+        }, 5000);
+    });
+</script>

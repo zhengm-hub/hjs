@@ -1,0 +1,75 @@
+@ layout("../_layout/layout.html",{title:'开发者门户 | 发布应用'}){
+
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="box box-primary">
+
+            <div class="box-header">
+                <h3 class="box-title">填写以下信息：</h3>
+            </div>
+            <!-- /.box-header -->
+            <!-- form start -->
+            <form id="creat-app-form" role="form" form method="post" action="@{BASE_URL}/upload/upload1"
+                  enctype="multipart/form-data">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="app">app名称（最好填写你在PaaS中创建的app名称）:</label>
+                        <input type="text" id="app" name="build.app" class="form-control" value=""
+                               placeholder="请填写app名称"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="version">app版本（比如10.04，将会作为最终的image的tag）:</label>
+                        <input type="text" id="version" name="build.version" class="form-control" value=""
+                               placeholder="请填写app版本"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="resume">备忘（强烈建议填写，否则容易忘记这个版本到底上了啥功能）:</label>
+                        <input type="text" id="resume" name="build.resume" class="form-control" value=""
+                               placeholder="请填写app备注"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="base">baseImage基础镜像:</label>
+                        <select id="base" name="build.base" class="form-control">
+
+                            <option value="tomcat6">tomcat6</option>
+
+                            <option value="tomcat7" selected="selected">tomcat7</option>
+
+                            <option value="gunicorn">gunicorn</option>
+
+                            <option value="nodejs">nodejs</option>
+
+                            <option value="php">php</option>
+
+                        </select>
+                    </div>
+
+                    <div class="form-group" style="display: none">
+                        <label for="tarball">tar.gz包地址（e.g. http://10.5.4.3/path/to/bin.tar.gz，java的话是war包）：</label>
+                        <input type="text" id="tarball" name="build.tarball" class="form-control" value=""
+                               placeholder="请填写app包地址"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="file">直接上传（强烈建议直接在上面给出tar.gz包地址，不推荐直接上传）:</label>
+                        <input type="file" id="file" name="file" class="form-control"/>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                    <button type="submit" class="btn btn-primary">Build</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.box -->
+    </div>
+    <!--/.col (left) -->
+</div>
+
+@ }

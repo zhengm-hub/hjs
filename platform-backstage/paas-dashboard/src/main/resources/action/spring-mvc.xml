@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:lang="http://www.springframework.org/schema/lang" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:cache="http://www.springframework.org/schema/cache" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	         http://www.springframework.org/schema/beans/spring-beans.xsd
+	         http://www.springframework.org/schema/lang
+	         http://www.springframework.org/schema/lang/spring-lang.xsd
+	         http://www.springframework.org/schema/tx
+	         http://www.springframework.org/schema/tx/spring-tx.xsd
+	         http://www.springframework.org/schema/aop
+	         http://www.springframework.org/schema/aop/spring-aop.xsd
+	         http://www.springframework.org/schema/mvc
+	         http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	         http://www.springframework.org/schema/context
+	         http://www.springframework.org/schema/context/spring-context.xsd
+	         http://www.springframework.org/schema/cache
+	         http://www.springframework.org/schema/cache/spring-cache.xsd
+	         http://www.springframework.org/schema/task
+	         http://www.springframework.org/schema/task/spring-task.xsd">
+
+
+    <!-- 自动扫描的包名 -->
+    <context:component-scan base-package="cn.dceast.platform.paas">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Service"/>
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+   <!-- <annotaion-driven/>标签：
+    这个标签对应的实现类是org.springframework.web.servlet.config.AnnotationDrivenBeanDefinitionParser
+    仔细阅读它的注释文档可以很明显的看到这个类的作用。解析这个文档：
+    这个类主要注册8个类的实例：
+    1.RequestMappingHandlerMapping
+    2.BeanNameUrlHandlerMapping
+    3.RequestMappingHandlerAdapter
+    4.HttpRequestHandlerAdapter
+    5.SimpleControllerHandlerAdapter
+    6.ExceptionHandlerExceptionResolver
+    7.ResponseStatusExceptionResolver
+    8.DefaultHandlerExceptionResolver
+    1是处理@RequestMapping注解的，2.将controller类的名字映射为请求url。1和2都实现了HandlerMapping接口，用来处理请求映射。
+    3是处理@Controller注解的控制器类，4是处理继承HttpRequestHandlerAdapter类的控制器类，
+    5.处理继承SimpleControllerHandlerAdapter类的控制器。所以这三个是用来处理请求的。
+    具体点说就是确定调用哪个controller的哪个方法来处理当前请求。
+    6,7,8全部继承AbstractHandlerExceptionResolver，这个类实现HandlerExceptionResolver，
+    该接口定义：接口实现的对象可以解决处理器映射、执行期间抛出的异常，还有错误的视图。
+    所以<annotaion-driven/>标签主要是用来帮助我们处理请求映射，决定是哪个controller的哪个方法来处理当前请求，异常处理。-->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="false">
+            <ref bean="jsonConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--自定义keyGeneratorService生成缓存key值-->
+    <!--<bean id="keyGeneratorService" class="cn.dceast.platform.paas.service.cache.KeyGeneratorSerbean>-->
+   <!-- <cache:annotation-driven/>有一个cache-manager属性用来指定当前所使用的CacheManager对应的bean的名称，
+    默认是cacheManager，所以当我们的CacheManager的id为cacheManager时我们可以不指定该参数，否则就需要我们指定了。
+    <cache:annotation-driven/>还可以指定一个mode属性，可选值有proxy和aspectj。默认是使用proxy。
+    当mode为proxy时，只有缓存方法在外部被调用的时候Spring Cache才会发生作用，
+    这也就意味着如果一个缓存方法在其声明对象内部被调用时Spring Cache是不会发生作用的。
+    而mode为aspectj时就不会有这种问题。另外使用proxy时，只有public方法上的@Cacheable等标注才会起作用，
+    如果需要非public方法上的方法也可以使用Spring Cache时把mode设置为aspectj。
+    此外，<cache:annotation-driven/>还可以指定一个proxy-target-class属性，表示是否要代理class，默认为false。
+    我们前面提到的@Cacheable、@cacheEvict等也可以标注在接口上，这对于基于接口的代理来说是没有什么问题的，
+    但是需要注意的是当我们设置proxy-target-class为true或者mode为aspectj时，是直接基于class进行操作的，
+    定义在接口上的@Cacheable等Cache注解不会被识别到，那对应的Spring Cache也不会起作用了。
+    需要注意的是<cache:annotation-driven/>只会去寻找定义在同一个ApplicationContext下的@Cacheable等缓存注解。-->
+    <!--<cache:annotation-driven key-generator="keyGeneratorService" cache-manager="cacheManager"/>
+    &lt;!&ndash; spring自己的缓存管理器，这里定义了两个缓存位置名称 ，既注解中的value &ndash;&gt;
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <bean
+                        class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+                        p:name="default" />
+                <bean
+                        class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+                        p:name="users" />
+               &lt;!&ndash; <bean
+                        class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+                        p:name="folder" />
+                <bean
+                        class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+                        p:name="article" />
+                <bean
+                        class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+                        p:name="media" />&ndash;&gt;
+            </set>
+        </property>
+    </bean>-->
+
+    <!-- 静态资源访问 -->
+    <!--在DispacheServlet配置为"/"，拦截所有,为了区分出关注的资源的访问,配置mvc:resource-->
+    <mvc:resources mapping="/assets/**" location="/assets/" cache-period="31556926"/>
+    <mvc:resources mapping="/static/**" location="/static/" cache-period="31556926"/>
+
+
+    <!-- 拦截器配置 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <!-- 全局拦截器 主要用于拦截 登录用户 -->
+            <bean class="cn.dceast.platform.paas.interceptor.GlobalInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+
+    <!-- 文件上传配置 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8"></property>
+        <property name="maxUploadSize" value="10485760000"></property>
+        <property name="maxInMemorySize" value="40960"></property>
+    </bean>
+
+    <import resource="action-beetl.xml"/>
+    <import resource="action-fastjson.xml"/>
+
+</beans>

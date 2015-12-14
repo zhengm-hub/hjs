@@ -1,0 +1,15 @@
+{
+  "name": "zTree_v3",
+  "homepage": "https://github.com/zTree/zTree_v3",
+  "version": "3.5.18",
+  "_release": "3.5.18",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.5.18",
+    "commit": "e3e12b87de424594569839f1c37eaa8559dc9c2b"
+  },
+  "_source": "https://github.com/zTree/zTree_v3.git",
+  "_target": "~3.5.18",
+  "_originalSource": "https://github.com/zTree/zTree_v3.git",
+  "_direct": true
+}

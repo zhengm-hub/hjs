@@ -1,0 +1,11 @@
+@ var scheme = request.scheme;
+@ var server = request.serverName;
+@ var serverPortr = request.serverPort;
+@ var contextPath = request.contextPath;
+@ var BASE_URL = scheme + "://" +server;
+@ if(serverPortr==80){
+@   BASE_URL = BASE_URL + ":" + contextPath;
+@ }else {
+@   BASE_URL = BASE_URL + ":" + serverPortr + contextPath;
+@ }
+@ template.binding("BASE_URL",BASE_URL);

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dceast.platform.paas.repository.BuildMapper">
+    <resultMap id="BaseResultMap" type="cn.dceast.platform.paas.model.Build">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="app" property="app" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="resume" property="resume" jdbcType="VARCHAR"/>
+        <result column="base" property="base" jdbcType="VARCHAR"/>
+        <result column="image" property="image" jdbcType="VARCHAR"/>
+        <result column="tarball" property="tarball" jdbcType="VARCHAR"/>
+        <result column="repo" property="repo" jdbcType="VARCHAR"/>
+        <result column="branch" property="branch" jdbcType="VARCHAR"/>
+        <result column="STATUS" property="status" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="create_at" property="createAt" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, app, version, resume, base, image, tarball, repo, branch, STATUS, user_id, user_name, 
+    create_at
+  </sql>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from build
+    </select>
+    <!-- 根据条件查询 -->
+    <select id="selectBy" parameterType="Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from build
+        <where>
+
+        </where>
+        <!--排序方式 -->
+        <if test="orderBy != null and orderBy != '' ">
+            order by ${orderBy}
+        </if>
+    </select>
+    <!--
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+      select
+      <include refid="Base_Column_List" />
+      from build
+      where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+      delete from build
+      where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="cn.dceast.platform.paas.model.Build" >
+      insert into build (id, app, version,
+        resume, base, image,
+        tarball, repo, branch,
+        STATUS, user_id, user_name,
+        create_at)
+      values (#{id,jdbcType=INTEGER}, #{app,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR},
+        #{resume,jdbcType=VARCHAR}, #{base,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR},
+        #{tarball,jdbcType=VARCHAR}, #{repo,jdbcType=VARCHAR}, #{branch,jdbcType=VARCHAR},
+        #{status,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR},
+        #{createAt,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.dceast.platform.paas.model.Build" >
+      insert into build
+      <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="id != null" >
+          id,
+        </if>
+        <if test="app != null" >
+          app,
+        </if>
+        <if test="version != null" >
+          version,
+        </if>
+        <if test="resume != null" >
+          resume,
+        </if>
+        <if test="base != null" >
+          base,
+        </if>
+        <if test="image != null" >
+          image,
+        </if>
+        <if test="tarball != null" >
+          tarball,
+        </if>
+        <if test="repo != null" >
+          repo,
+        </if>
+        <if test="branch != null" >
+          branch,
+        </if>
+        <if test="status != null" >
+          STATUS,
+        </if>
+        <if test="userId != null" >
+          user_id,
+        </if>
+        <if test="userName != null" >
+          user_name,
+        </if>
+        <if test="createAt != null" >
+          create_at,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="id != null" >
+          #{id,jdbcType=INTEGER},
+        </if>
+        <if test="app != null" >
+          #{app,jdbcType=VARCHAR},
+        </if>
+        <if test="version != null" >
+          #{version,jdbcType=VARCHAR},
+        </if>
+        <if test="resume != null" >
+          #{resume,jdbcType=VARCHAR},
+        </if>
+        <if test="base != null" >
+          #{base,jdbcType=VARCHAR},
+        </if>
+        <if test="image != null" >
+          #{image,jdbcType=VARCHAR},
+        </if>
+        <if test="tarball != null" >
+          #{tarball,jdbcType=VARCHAR},
+        </if>
+        <if test="repo != null" >
+          #{repo,jdbcType=VARCHAR},
+        </if>
+        <if test="branch != null" >
+          #{branch,jdbcType=VARCHAR},
+        </if>
+        <if test="status != null" >
+          #{status,jdbcType=VARCHAR},
+        </if>
+        <if test="userId != null" >
+          #{userId,jdbcType=INTEGER},
+        </if>
+        <if test="userName != null" >
+          #{userName,jdbcType=VARCHAR},
+        </if>
+        <if test="createAt != null" >
+          #{createAt,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.dceast.platform.paas.model.Build" >
+      update build
+      <set >
+        <if test="app != null" >
+          app = #{app,jdbcType=VARCHAR},
+        </if>
+        <if test="version != null" >
+          version = #{version,jdbcType=VARCHAR},
+        </if>
+        <if test="resume != null" >
+          resume = #{resume,jdbcType=VARCHAR},
+        </if>
+        <if test="base != null" >
+          base = #{base,jdbcType=VARCHAR},
+        </if>
+        <if test="image != null" >
+          image = #{image,jdbcType=VARCHAR},
+        </if>
+        <if test="tarball != null" >
+          tarball = #{tarball,jdbcType=VARCHAR},
+        </if>
+        <if test="repo != null" >
+          repo = #{repo,jdbcType=VARCHAR},
+        </if>
+        <if test="branch != null" >
+          branch = #{branch,jdbcType=VARCHAR},
+        </if>
+        <if test="status != null" >
+          STATUS = #{status,jdbcType=VARCHAR},
+        </if>
+        <if test="userId != null" >
+          user_id = #{userId,jdbcType=INTEGER},
+        </if>
+        <if test="userName != null" >
+          user_name = #{userName,jdbcType=VARCHAR},
+        </if>
+        <if test="createAt != null" >
+          create_at = #{createAt,jdbcType=TIMESTAMP},
+        </if>
+      </set>
+      where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.dceast.platform.paas.model.Build" >
+      update build
+      set app = #{app,jdbcType=VARCHAR},
+        version = #{version,jdbcType=VARCHAR},
+        resume = #{resume,jdbcType=VARCHAR},
+        base = #{base,jdbcType=VARCHAR},
+        image = #{image,jdbcType=VARCHAR},
+        tarball = #{tarball,jdbcType=VARCHAR},
+        repo = #{repo,jdbcType=VARCHAR},
+        branch = #{branch,jdbcType=VARCHAR},
+        STATUS = #{status,jdbcType=VARCHAR},
+        user_id = #{userId,jdbcType=INTEGER},
+        user_name = #{userName,jdbcType=VARCHAR},
+        create_at = #{createAt,jdbcType=TIMESTAMP}
+      where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    -->
+
+</mapper>

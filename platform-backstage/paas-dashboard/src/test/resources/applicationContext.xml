@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:lang="http://www.springframework.org/schema/lang" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:cache="http://www.springframework.org/schema/cache" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	         http://www.springframework.org/schema/beans/spring-beans.xsd
+	         http://www.springframework.org/schema/lang
+	         http://www.springframework.org/schema/lang/spring-lang.xsd
+	         http://www.springframework.org/schema/tx
+	         http://www.springframework.org/schema/tx/spring-tx.xsd
+	         http://www.springframework.org/schema/aop
+	         http://www.springframework.org/schema/aop/spring-aop.xsd
+	         http://www.springframework.org/schema/mvc
+	         http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	         http://www.springframework.org/schema/context
+	         http://www.springframework.org/schema/context/spring-context.xsd
+	         http://www.springframework.org/schema/cache
+	         http://www.springframework.org/schema/cache/spring-cache.xsd
+	         http://www.springframework.org/schema/task
+	         http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <!-- 加载配置文件 -->
+    <context:property-placeholder location="classpath:application.properties"/>
+    <!--该配置项其实也包含了自动注入processor的功能，
+    因此当使用<context:component-scan/>后，即可将<context:annotation-config/>省去。-->
+    <!--<context:annotation-config/>-->
+
+    <context:component-scan base-package="cn.dceast.platform.paas">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Service"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Repository"/>
+        <context:exclude-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 连接池 -->
+    <import resource="classpath:spring-druid.xml"/>
+    <!-- ORM -->
+    <import resource="classpath:spring-mybatis.xml"/>
+
+    <bean id="keyGeneratorService" class="cn.dceast.platform.paas.service.cache.KeyGeneratorSer"></bean>
+    <cache:annotation-driven key-generator="keyGeneratorService" cache-manager="cacheManager"/>
+    <!-- spring自己的缓存管理器，这里定义了两个缓存位置名称 ，既注解中的value -->
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <bean
+                        class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+                        p:name="default" />
+                <bean
+                        class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+                        p:name="users" />
+                <!-- <bean
+                         class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+                         p:name="folder" />
+                 <bean
+                         class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+                         p:name="article" />
+                 <bean
+                         class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"
+                         p:name="media" />-->
+            </set>
+        </property>
+    </bean>
+
+    <!-- 启动后执行任务 -->
+    <!--<bean class="cn.dceast.platform.paas.listener.StartupListener"/>-->
+</beans>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+       <!-- id和result都映射一个单独列的值到简单数据类型
+        这两者之间的唯一不同是id表示的结果将是当比较对象实例时用到的标识属性。
+        这帮助来改进整体表现，特别是缓存和嵌入结果映射（也就是联合映射）。-->
+<mapper namespace="cn.dceast.platform.paas.repository.HomeMapper">
+    <resultMap id="BaseResultMap" type="cn.dceast.platform.paas.model.Home">
+        <id column="home_Id" property="homeId" jdbcType="INTEGER"/>
+        <result column="banner_Img_Url" property="bannerImgUrl" jdbcType="VARCHAR"/>
+        <result column="quick_Answer_Img_Url" property="quickAnswerImgUrl" jdbcType="VARCHAR"/>
+        <result column="my_Answer_Img_Url" property="myAnswerImgUrl" jdbcType="VARCHAR"/>
+        <result column="find_Engineer_Img_Url" property="findEngineerImgUrl" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+      home_Id, banner_Img_Url, quick_Answer_Img_Url,my_Answer_Img_Url,find_Engineer_Img_Url
+    </sql>
+    <!--
+        ===================================================================
+        通用Mapper会自动生成一些sql，如：id为insert的由通用Mapper自动生成
+        ===================================================================
+    -->
+
+    <!-- 查询首页资源 -->
+    <select id="selectHome" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from home
+    </select>
+
+
+</mapper>

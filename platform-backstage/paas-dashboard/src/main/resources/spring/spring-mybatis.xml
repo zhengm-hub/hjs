@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-4.1.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+
+    <!-- ========================================针对myBatis的配置项============================== -->
+    <!-- 配置sqlSessionFactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- 实例化sqlSessionFactory时需要使用上述配置好的数据源以及SQL映射文件 -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- mybatis 配置文件 -->
+        <property name="configLocation" value="classpath:mybatis.xml"/>
+        <!-- 自动扫描mappers/目录下的所有SQL映射的xml文件, 省掉Configuration.xml里的手工配置 -->
+        <property name="mapperLocations" value="classpath:mappers/**/*.xml"/>
+        <!--<property name="typeAliasesPackage" value="cn.dceast.platform.paas.model"/> -->
+        <property name="typeAliasesPackage" value="${mybatis.modelPackage}"/>
+    </bean>
+    <!-- 配置扫描器 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <!-- 扫描这个包以及它的子包下的所有映射接口类 -->
+        <property name="basePackage" value="cn.dceast.platform.paas.repository"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+
+    <!-- 配置Spring的事务管理器 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource">
+        </property>
+    </bean>
+
+    <tx:advice id="centerTxAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="find*,get*,query*" read-only="true"/>
+            <tx:method name="*" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:aspectj-autoproxy />
+    <aop:config>
+        <!--任意返回值,cn.dceast.platform包下的任意Service,下的任意方法的任意参数-->
+        <aop:pointcut id="dbOperation" expression="execution(public * cn.dceast.platform..*Service.*(..))"/>
+        <aop:advisor advice-ref="centerTxAdvice" pointcut-ref="dbOperation"/>
+    </aop:config>
+
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+
+    <!-- 切面bean组件 为了代码可读性，显示声明不实用注解 -->
+    <bean id="exceptionLogger" class="cn.dceast.platform.paas.service.aop.ExceptionLogger"></bean>
+    <!-- 异常写日志切面 -->
+    <aop:config>
+        <aop:pointcut id="servicePointcut" expression="execution(public * cn.dceast.platform..*Service.*(..))"/>
+        <aop:aspect  id="loggerAspect" ref="exceptionLogger">
+            <aop:after-throwing throwing="ex" method="loggerExcetpion" pointcut-ref="servicePointcut"/>
+        </aop:aspect>
+    </aop:config>
+
+    <!-- 注解方式配置事物
+    <tx:annotation-driven transaction-manager="transactionManager" />-->
+
+</beans>

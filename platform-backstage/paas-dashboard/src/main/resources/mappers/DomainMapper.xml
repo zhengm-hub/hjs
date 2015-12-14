@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dceast.platform.paas.repository.DomainMapper" >
+  <resultMap id="BaseResultMap" type="cn.dceast.platform.paas.model.Domain" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="domain" property="domain" jdbcType="VARCHAR" />
+    <result column="team_id" property="teamId" jdbcType="INTEGER" />
+    <result column="team_name" property="teamName" jdbcType="VARCHAR" />
+    <result column="app_id" property="appId" jdbcType="INTEGER" />
+    <result column="app_name" property="appName" jdbcType="VARCHAR" />
+    <result column="creator" property="creator" jdbcType="INTEGER" />
+    <result column="creator_name" property="creatorName" jdbcType="VARCHAR" />
+    <result column="bind_user_id" property="bindUserId" jdbcType="VARCHAR" />
+    <result column="bind_at" property="bindAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, domain, team_id, team_name, app_id, app_name, creator, creator_name, bind_user_id, 
+    bind_at
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from domain
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from domain
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.dceast.platform.paas.model.Domain" >
+    insert into domain (id, domain, team_id, 
+      team_name, app_id, app_name, 
+      creator, creator_name, bind_user_id, 
+      bind_at)
+    values (#{id,jdbcType=INTEGER}, #{domain,jdbcType=VARCHAR}, #{teamId,jdbcType=INTEGER}, 
+      #{teamName,jdbcType=VARCHAR}, #{appId,jdbcType=INTEGER}, #{appName,jdbcType=VARCHAR}, 
+      #{creator,jdbcType=INTEGER}, #{creatorName,jdbcType=VARCHAR}, #{bindUserId,jdbcType=VARCHAR}, 
+      #{bindAt,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.dceast.platform.paas.model.Domain" >
+    insert into domain
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="domain != null" >
+        domain,
+      </if>
+      <if test="teamId != null" >
+        team_id,
+      </if>
+      <if test="teamName != null" >
+        team_name,
+      </if>
+      <if test="appId != null" >
+        app_id,
+      </if>
+      <if test="appName != null" >
+        app_name,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="creatorName != null" >
+        creator_name,
+      </if>
+      <if test="bindUserId != null" >
+        bind_user_id,
+      </if>
+      <if test="bindAt != null" >
+        bind_at,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="domain != null" >
+        #{domain,jdbcType=VARCHAR},
+      </if>
+      <if test="teamId != null" >
+        #{teamId,jdbcType=INTEGER},
+      </if>
+      <if test="teamName != null" >
+        #{teamName,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null" >
+        #{appId,jdbcType=INTEGER},
+      </if>
+      <if test="appName != null" >
+        #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=INTEGER},
+      </if>
+      <if test="creatorName != null" >
+        #{creatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="bindUserId != null" >
+        #{bindUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="bindAt != null" >
+        #{bindAt,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.dceast.platform.paas.model.Domain" >
+    update domain
+    <set >
+      <if test="domain != null" >
+        domain = #{domain,jdbcType=VARCHAR},
+      </if>
+      <if test="teamId != null" >
+        team_id = #{teamId,jdbcType=INTEGER},
+      </if>
+      <if test="teamName != null" >
+        team_name = #{teamName,jdbcType=VARCHAR},
+      </if>
+      <if test="appId != null" >
+        app_id = #{appId,jdbcType=INTEGER},
+      </if>
+      <if test="appName != null" >
+        app_name = #{appName,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=INTEGER},
+      </if>
+      <if test="creatorName != null" >
+        creator_name = #{creatorName,jdbcType=VARCHAR},
+      </if>
+      <if test="bindUserId != null" >
+        bind_user_id = #{bindUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="bindAt != null" >
+        bind_at = #{bindAt,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.dceast.platform.paas.model.Domain" >
+    update domain
+    set domain = #{domain,jdbcType=VARCHAR},
+      team_id = #{teamId,jdbcType=INTEGER},
+      team_name = #{teamName,jdbcType=VARCHAR},
+      app_id = #{appId,jdbcType=INTEGER},
+      app_name = #{appName,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=INTEGER},
+      creator_name = #{creatorName,jdbcType=VARCHAR},
+      bind_user_id = #{bindUserId,jdbcType=VARCHAR},
+      bind_at = #{bindAt,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

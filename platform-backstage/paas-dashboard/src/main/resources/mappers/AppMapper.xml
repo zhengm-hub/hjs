@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dceast.platform.paas.repository.AppMapper">
+    <resultMap id="BaseResultMap" type="cn.dceast.platform.paas.model.App">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="INTEGER"/>
+        <result column="team_id" property="teamId" jdbcType="INTEGER"/>
+        <result column="team_name" property="teamName" jdbcType="VARCHAR"/>
+        <result column="image" property="image" jdbcType="VARCHAR"/>
+        <result column="memory" property="memory" jdbcType="INTEGER"/>
+        <result column="instance" property="instance" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="health" property="health" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, name, creator, team_id, team_name, image, memory, instance, status, health
+    </sql>
+    <!-- 查询全部 -->
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from app
+    </select>
+    <!-- 根据条件查询 -->
+    <select id="selectBy" parameterType="Map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from app
+        <where>
+
+        </where>
+        <!--排序方式 -->
+        <if test="orderBy != null and orderBy != '' ">
+            order by ${orderBy}
+        </if>
+    </select>
+    <!-- 默认方法
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from app
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from app
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="cn.dceast.platform.paas.model.App">
+    insert into app (id, name, creator, 
+      team_id, team_name, image, 
+      memory, instance, status, 
+      health)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{creator,jdbcType=INTEGER}, 
+      #{teamId,jdbcType=INTEGER}, #{teamName,jdbcType=VARCHAR}, #{image,jdbcType=VARCHAR}, 
+      #{memory,jdbcType=INTEGER}, #{instance,jdbcType=INTEGER}, #{status,jdbcType=TINYINT}, 
+      #{health,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="cn.dceast.platform.paas.model.App">
+        insert into app
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="creator != null">
+                creator,
+            </if>
+            <if test="teamId != null">
+                team_id,
+            </if>
+            <if test="teamName != null">
+                team_name,
+            </if>
+            <if test="image != null">
+                image,
+            </if>
+            <if test="memory != null">
+                memory,
+            </if>
+            <if test="instance != null">
+                instance,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="health != null">
+                health,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                #{creator,jdbcType=INTEGER},
+            </if>
+            <if test="teamId != null">
+                #{teamId,jdbcType=INTEGER},
+            </if>
+            <if test="teamName != null">
+                #{teamName,jdbcType=VARCHAR},
+            </if>
+            <if test="image != null">
+                #{image,jdbcType=VARCHAR},
+            </if>
+            <if test="memory != null">
+                #{memory,jdbcType=INTEGER},
+            </if>
+            <if test="instance != null">
+                #{instance,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=TINYINT},
+            </if>
+            <if test="health != null">
+                #{health,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.dceast.platform.paas.model.App">
+        update app
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="creator != null">
+                creator = #{creator,jdbcType=INTEGER},
+            </if>
+            <if test="teamId != null">
+                team_id = #{teamId,jdbcType=INTEGER},
+            </if>
+            <if test="teamName != null">
+                team_name = #{teamName,jdbcType=VARCHAR},
+            </if>
+            <if test="image != null">
+                image = #{image,jdbcType=VARCHAR},
+            </if>
+            <if test="memory != null">
+                memory = #{memory,jdbcType=INTEGER},
+            </if>
+            <if test="instance != null">
+                instance = #{instance,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=TINYINT},
+            </if>
+            <if test="health != null">
+                health = #{health,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.dceast.platform.paas.model.App">
+    update app
+    set name = #{name,jdbcType=VARCHAR},
+      creator = #{creator,jdbcType=INTEGER},
+      team_id = #{teamId,jdbcType=INTEGER},
+      team_name = #{teamName,jdbcType=VARCHAR},
+      image = #{image,jdbcType=VARCHAR},
+      memory = #{memory,jdbcType=INTEGER},
+      instance = #{instance,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT},
+      health = #{health,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  -->
+</mapper>

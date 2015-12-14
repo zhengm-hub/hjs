@@ -1,0 +1,107 @@
+@ layout("../_layout/layout.html",{title:'开发者门户 | 发布应用'}){
+
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="box box-primary">
+
+            <div class="box-header">
+                <h3 class="box-title">填写以下信息：</h3>
+            </div>
+            <!-- /.box-header -->
+
+            <!-- form start -->
+            <form id="creat-app-form" role="form" form method="post" action="@{BASE_URL}/api/apps">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="app-name">app名称（最好填写你在Builder中创建的app名称）:</label>
+                        <input
+                                type="text" id="app-name" name="app.name" class="form-control"
+                                value="" placeholder="请填写app名称"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="app-image">image地址 <a href="@{BASE_URL}/build">查看镜像</a> 没有？去<a
+                                href="@{BASE_URL}/build/add">构建平台</a>创建一个:
+                        </label> <input type="text" id="app-image" name="app.image"
+                                        class="form-control" value="" placeholder="请填写image地址"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="app-memory">memory 内存（每个实例分配多大内存，单位MB）:</label>
+                        <input
+                                type="text" id="app-memory" name="app.memory"
+                                class="form-control" value="256" placeholder="请填写memory大小"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="app-instance">instance 个数（要部署的实例个数）:</label>
+                        <input type="text"
+                               id="app-instance" name="app.instance" class="form-control"
+                               value="1" placeholder="请填写instance个数"/>
+                    </div>
+
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+                    <button type="button" class="btn btn-primary" onclick="creat();">Sbumit</button>
+                </div>
+            </form>
+        </div>
+        <!-- /.box -->
+    </div>
+    <!--/.col (left) -->
+</div>
+
+<script type="text/javascript">
+    var BASE_URL = "@{BASE_URL}";
+
+    $(function () {
+        initRestClient();
+    });
+
+
+    var initRestClient = function () {
+        //修改RestClient默认设置
+        $.rest.updateOptions({
+            baseUrl: BASE_URL + '/api/apps',
+            error: function (errMessage) {
+                layer.open({
+                    type: 1,
+                    shade: false,
+                    title: false, //不显示标题
+                    content: errMessage,
+                    cancel: function (index) {
+                        layer.close(index);
+                    }
+                });
+            }
+        });
+    }
+
+    var creat = function () {
+        var app = getApp();
+        $.rest.post({
+            url: '/',
+            data: app,
+            success: function (data, textStatus, jqXHR) {
+                debugger;
+                layer.msg(textStatus);
+            }
+        });
+    };
+
+    var getApp = function () {
+        return {
+            name: $("#app-name").val(),
+            image: $("#app-image").val(),
+            memory: $("#app-memory").val(),
+            instance: $("#app-instance").val()
+        };
+    };
+
+</script>
+
+@ }

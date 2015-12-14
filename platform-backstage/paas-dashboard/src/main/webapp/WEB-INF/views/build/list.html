@@ -1,0 +1,98 @@
+@ layout("../_layout/layout.html",{title:'开发者门户 | 构建镜像'}){
+
+<div class="row">
+    <!-- left column -->
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="box box-primary">
+
+            <div class="box-header">
+                <h3 class="box-title">builded paas images</h3>
+            </div>
+            <!-- /.box-header -->
+
+            <div class="box-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>App</th>
+                        <th>Version</th>
+                        <th>Resume</th>
+                        <th>Base</th>
+                        <th>Image</th>
+                        <th>CreateAt</th>
+                        <!--<th>Operation</th>-->
+                    </tr>
+                    </thead>
+                    <tbody id="dataList">
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer">
+                <button type="button" class="btn btn-primary" onclick="window.location.href='@{BASE_URL}/build/add';">
+                    Add
+                </button>
+            </div>
+        </div>
+        <!-- /.box -->
+    </div>
+    <!--/.col (left) -->
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        initRestClient();
+        initBuildsList();
+    });
+
+    var initRestClient = function () {
+        //修改RestClient默认设置
+        $.rest.updateOptions({
+            baseUrl: '@{BASE_URL}/api/builds',
+            error: function (errMessage) {
+                alert(errMessage);
+            }
+        });
+    }
+
+    var initBuildsList = function () {
+        var url = '@{BASE_URL}/api/builds';
+        $("#dataList").JsRenderData({
+            sourceUrl: url,
+            templateId: "dataListTpl",
+            isPage: true, //是否分页
+            pageSize: 10, //每页的个数
+            pageIndex: 1,
+            parameter: {isPage: true,}
+        });
+    }
+
+    // 删除
+    var del = function (id) {
+        $.rest.del({
+            url: '/{id}',
+            urlParams: {id: id},
+            success: function (data) {
+                initBuildsList();
+            }
+        });
+    }
+
+</script>
+
+@ }
+
+<script id="dataListTpl" type="text/x-jsrender">
+    {{for #data}}
+    <tr>
+        <td>{{:app}}</td>
+        <td>{{:version}}</td>
+        <td>{{:resume}}</td>
+        <td>{{:base}}</td>
+        <td>{{:image}}</td>
+        <td>{{:created}}</td>
+    </tr>
+    {{/for}}
+
+</script>
