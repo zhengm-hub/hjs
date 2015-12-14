@@ -1,0 +1,13 @@
+target
+logs
+WebContent
+\.settings
+\.project
+\.classpath
+\.DS_Store
+\.idea
+*.iml
+*.class
+*.jar
+*.war
+*.log
